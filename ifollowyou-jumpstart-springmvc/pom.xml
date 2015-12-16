@@ -21,12 +21,6 @@
 
         <!-- AssertJ is not a part of Spring IO platform, so the version must be provided explicitly -->
         <assertj.version>3.1.0</assertj.version>
-
-        <!-- tomcat -->
-        <tc7.version>7.0.67</tc7.version>
-        <tc8.version>8.0.30</tc8.version>
-        <tc7.path>tomcat-7/v${tc7.version}/bin/apache-tomcat-${tc7.version}.zip</tc7.path>
-        <tc8.path>tomcat-8/v${tc8.version}/bin/apache-tomcat-${tc8.version}.zip</tc8.path>
     </properties>
 
     <dependencyManagement>
@@ -98,10 +92,6 @@
             <groupId>javax.el</groupId>
             <artifactId>javax.el-api</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
         </dependency>
         <!-- Spring Data -->
         <dependency>
@@ -194,58 +184,6 @@
     </dependencies>
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven2-plugin</artifactId>
-                <version>1.4.17</version>
-                <configuration>
-                    <container>
-                        <containerId>tomcat8x</containerId>
-                        <zipUrlInstaller>
-                            <url>http://archive.apache.org/dist/tomcat/${tc8.path}</url>
-                            <downloadDir>${project.build.directory}/downloads</downloadDir>
-                            <extractDir>${project.build.directory}/extracts</extractDir>
-                        </zipUrlInstaller>
-                    </container>
-                    <configuration>
-                        <home>${project.build.directory}/tomcat8x</home>
-                        <properties>
-                            <cargo.servlet.port>8088</cargo.servlet.port>
-                        </properties>
-                    </configuration>
-                    <deployables>
-                        <deployable>
-                            <type>war</type>
-                            <properties>
-                                <context>/</context>
-                            </properties>
-                        </deployable>
-                    </deployables>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>start</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>start</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>stop</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>package</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>package</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
