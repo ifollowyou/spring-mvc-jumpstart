@@ -16,12 +16,18 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[]{ApplicationConfig.class, JpaConfig.class, SecurityConfig.class};
+        return new Class<?>[]{
+                ApplicationConfig.class,
+                JpaConfig.class,
+                SecurityConfig.class
+        };
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class<?>[]{WebMvcConfig.class};
+        return new Class<?>[]{
+                WebMvcConfig.class
+        };
     }
 
     @Override

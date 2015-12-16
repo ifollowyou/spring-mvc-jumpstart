@@ -14,11 +14,19 @@
     <properties>
         <maven.test.skip>true</maven.test.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java-version>1.8</java-version>
+        <java.version>1.8</java.version>
         <!-- Override Spring version -->
         <spring.version>4.2.3.RELEASE</spring.version>
+        <guava.version>18.0</guava.version>
+
         <!-- AssertJ is not a part of Spring IO platform, so the version must be provided explicitly -->
-        <assertj-core-version>3.1.0</assertj-core-version>
+        <assertj.version>3.1.0</assertj.version>
+
+        <!-- tomcat -->
+        <tc7.version>7.0.67</tc7.version>
+        <tc8.version>8.0.30</tc8.version>
+        <tc7.path>tomcat-7/v${tc7.version}/bin/apache-tomcat-${tc7.version}.zip</tc7.path>
+        <tc8.path>tomcat-8/v${tc8.version}/bin/apache-tomcat-${tc8.version}.zip</tc8.path>
     </properties>
 
     <dependencyManagement>
@@ -138,7 +146,14 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
         <!-- Test -->
         <dependency>
             <groupId>junit</groupId>
@@ -153,7 +168,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>${assertj-core-version}</version>
+            <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -185,16 +200,15 @@
                 <version>1.4.17</version>
                 <configuration>
                     <container>
-                        <containerId>tomcat7x</containerId>
+                        <containerId>tomcat8x</containerId>
                         <zipUrlInstaller>
-                            <url>http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.67/bin/apache-tomcat-7.0.67.zip
-                            </url>
+                            <url>http://archive.apache.org/dist/tomcat/${tc8.path}</url>
                             <downloadDir>${project.build.directory}/downloads</downloadDir>
                             <extractDir>${project.build.directory}/extracts</extractDir>
                         </zipUrlInstaller>
                     </container>
                     <configuration>
-                        <home>${project.build.directory}/tomcat7x</home>
+                        <home>${project.build.directory}/tomcat8x</home>
                         <properties>
                             <cargo.servlet.port>8088</cargo.servlet.port>
                         </properties>
@@ -243,8 +257,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.3</version>
                 <configuration>
-                    <source>${java-version}</source>
-                    <target>${java-version}</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
 
@@ -260,6 +274,17 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.2.14.v20151106</version>
+                <configuration>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <webApp>
+                        <contextPath>/</contextPath>
+                    </webApp>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
